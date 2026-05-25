@@ -6,8 +6,8 @@ export default function Navbar() {
           
           {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center cursor-pointer text-[#006BFF]">
-            <svg className="w-8 h-8 mr-2" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3ZM5 13.18V17.18C5 17.18 8 20 12 20C16 20 19 17.18 19 17.18V13.18L12 17L5 13.18Z" />
+            <svg className="w-8 h-8 mr-2" viewBox="89.75 -4.25 24 24" fill="currentColor">
+              <path d="M91.1885 5.48222L96.1378 9.29731L96.1213 14.5188L100.143 11.873L104.007 14.6013L112.686 1L91.1885 5.48222ZM98.4609 10.5594L97.0513 12.9309L97.0575 8.93951L109.964 2.72504L98.4609 10.5594Z" />
             </svg>
             <span className="text-[22px] font-bold tracking-tight">internshala</span>
           </div>
