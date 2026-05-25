@@ -20,4 +20,4 @@ npm run dev
 ```
 
 ## Live Demo
-[Link here after hosting]
+[https://internshala-s.vercel.app/](https://internshala-s.vercel.app/)
