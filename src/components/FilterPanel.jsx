@@ -1,12 +1,31 @@
 import { useState } from 'react';
+import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export default function FilterPanel({ filters, setFilter, resetFilters }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [stipendValue, setStipendValue] = useState(filters.minStipend || 0);
 
   const handleProfileChange = (e) => setFilter('profile', e.target.value);
   const handleLocationChange = (e) => setFilter('location', e.target.value);
   const handleDurationChange = (e) => setFilter('duration', e.target.value);
-  const handleStipendChange = (e) => setFilter('minStipend', Number(e.target.value));
+  const handleStipendChange = (e) => {
+    const val = Number(e.target.value);
+    setStipendValue(val);
+    setFilter('minStipend', val);
+  };
+  const handleDateChange = (e) => setFilter('startDate', e.target.value);
+
+  // New Checkbox states
+  const [cityChecked, setCityChecked] = useState(false);
+  const [wfhChecked, setWfhChecked] = useState(false);
+  const [partTimeChecked, setPartTimeChecked] = useState(false);
+
+  const [jobOfferChecked, setJobOfferChecked] = useState(false);
+  const [fastResponseChecked, setFastResponseChecked] = useState(false);
+  const [earlyApplicantChecked, setEarlyApplicantChecked] = useState(false);
+  const [womenChecked, setWomenChecked] = useState(false);
+  
+  const [keyword, setKeyword] = useState('');
 
   return (
     <>
@@ -17,7 +36,7 @@ export default function FilterPanel({ filters, setFilter, resetFilters }) {
           className="w-full flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 text-gray-800 font-semibold"
         >
           <span className="flex items-center gap-2">
-            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+            <FunnelIcon className="w-5 h-5 text-gray-700" />
             Filters
           </span>
           <svg className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -25,87 +44,171 @@ export default function FilterPanel({ filters, setFilter, resetFilters }) {
       </div>
 
       {/* Main Panel Content */}
-      <div className={`${isOpen ? 'block' : 'hidden'} lg:block bg-white p-6 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-gray-100`}>
-        <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <svg className="w-5 h-5 text-blue-600 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
-            Filters
-          </h2>
-          <button 
-            onClick={resetFilters}
-            className="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            Clear All
-          </button>
+      <div className={`${isOpen ? 'block' : 'hidden'} lg:block bg-white p-5 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.04)]`}>
+        <div className="flex items-center justify-center text-center mb-6">
+          <FunnelIcon className="w-5 h-5 text-gray-700 mr-2" />
+          <h2 className="text-lg font-bold text-gray-900">Filters</h2>
         </div>
 
-        <div className="space-y-6">
-          {/* Section 1: Profile */}
+        <div className="space-y-5">
+          {/* Section a: Profile */}
           <div>
-            <label className="block text-[14px] font-bold text-gray-700 mb-2">Profile</label>
+            <label className="block text-sm text-gray-600 mb-1">Profile</label>
             <input 
               type="text" 
-              value={filters.profile}
+              value={filters.profile || ''}
               onChange={handleProfileChange}
-              placeholder="e.g. Marketing, Finance" 
-              className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-gray-400 text-gray-900" 
+              placeholder="e.g. Marketing" 
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#008bdc] placeholder-gray-400 text-gray-900" 
             />
           </div>
 
-          {/* Section 2: Location */}
+          {/* Section b: Location */}
           <div>
-            <label className="block text-[14px] font-bold text-gray-700 mb-2">Location</label>
+            <label className="block text-sm text-gray-600 mb-1">Location</label>
             <input 
               type="text" 
-              value={filters.location}
+              value={filters.location || ''}
               onChange={handleLocationChange}
-              placeholder="e.g. Delhi, Mumbai, Work From Home" 
-              className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-gray-400 text-gray-900" 
+              placeholder="e.g. Delhi" 
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#008bdc] placeholder-gray-400 text-gray-900 mb-3" 
+            />
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <input type="checkbox" checked={cityChecked} onChange={() => setCityChecked(!cityChecked)} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+                Internships in my city
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <input type="checkbox" checked={wfhChecked} onChange={() => {
+                  setWfhChecked(!wfhChecked);
+                  setFilter('location', !wfhChecked ? 'Work From Home' : '');
+                }} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+                Work from home
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <input type="checkbox" checked={partTimeChecked} onChange={() => setPartTimeChecked(!partTimeChecked)} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+                Part-time
+              </label>
+            </div>
+          </div>
+
+          {/* Section c: Stipend */}
+          <div>
+            <label className="block text-sm text-gray-600 mb-2">Desired minimum monthly stipend (₹)</label>
+            <div className="px-1 mt-2">
+              <input 
+                type="range" 
+                min="0" 
+                max="10000" 
+                step="1000" 
+                value={stipendValue}
+                onChange={handleStipendChange}
+                className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#008bdc]"
+                style={{
+                  background: `linear-gradient(to right, #008bdc ${(stipendValue / 10000) * 100}%, #e5e7eb ${(stipendValue / 10000) * 100}%)`
+                }}
+              />
+              <div className="flex justify-between text-xs text-gray-400 mt-2">
+                <span>0</span>
+                <span>2K</span>
+                <span>4K</span>
+                <span>6K</span>
+                <span>8K</span>
+                <span>10K</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Section d: Starting from */}
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">Starting from (or after)</label>
+            <input 
+              type="date"
+              onChange={handleDateChange}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#008bdc] text-gray-700" 
+              placeholder="Choose date"
             />
           </div>
 
-          {/* Section 3: Duration */}
+          {/* Section e: Max duration */}
           <div>
-            <label className="block text-[14px] font-bold text-gray-700 mb-2">Duration</label>
+            <label className="block text-sm text-gray-600 mb-1">Max. duration (months)</label>
             <select 
-              value={filters.duration}
+              value={filters.duration || ''}
               onChange={handleDurationChange}
-              className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all appearance-none bg-white text-gray-900"
-              style={{
-                backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 1rem top 50%',
-                backgroundSize: '0.65rem auto'
-              }}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#008bdc] text-gray-700 bg-white"
             >
-              <option value="">Any</option>
-              <option value="1-3">1-3 Months</option>
-              <option value="3-6">3-6 Months</option>
-              <option value="6+">6+ Months</option>
+              <option value="">Choose duration</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="6">6</option>
             </select>
           </div>
 
-          {/* Section 4: Stipend */}
-          <div>
-            <label className="block text-[14px] font-bold text-gray-700 mb-2">Minimum Stipend</label>
-            <select 
-              value={filters.minStipend}
-              onChange={handleStipendChange}
-              className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all appearance-none bg-white text-gray-900"
-              style={{
-                backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 1rem top 50%',
-                backgroundSize: '0.65rem auto'
-              }}
-            >
-              <option value={0}>Any</option>
-              <option value={2000}>₹2,000+ / month</option>
-              <option value={5000}>₹5,000+ / month</option>
-              <option value={10000}>₹10,000+ / month</option>
-              <option value={15000}>₹15,000+ / month</option>
-            </select>
+          {/* Section f: Checkboxes */}
+          <div className="flex flex-col gap-3">
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input type="checkbox" checked={jobOfferChecked} onChange={() => setJobOfferChecked(!jobOfferChecked)} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+              Internships with job offer <span className="text-gray-400 ml-1">ⓘ</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input type="checkbox" checked={fastResponseChecked} onChange={() => setFastResponseChecked(!fastResponseChecked)} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+              Fast response <span className="text-gray-400 ml-1">ⓘ</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input type="checkbox" checked={earlyApplicantChecked} onChange={() => setEarlyApplicantChecked(!earlyApplicantChecked)} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+              Early applicant <span className="text-gray-400 ml-1">ⓘ</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input type="checkbox" checked={womenChecked} onChange={() => setWomenChecked(!womenChecked)} className="w-4 h-4 text-[#008bdc] border-gray-300 rounded focus:ring-[#008bdc]" />
+              Internships for women <span className="text-gray-400 ml-1">ⓘ</span>
+            </label>
           </div>
+
+          {/* Section g: Clear all */}
+          <div className="flex justify-end pt-2">
+            <button 
+              onClick={() => {
+                resetFilters();
+                setStipendValue(0);
+                setCityChecked(false);
+                setWfhChecked(false);
+                setPartTimeChecked(false);
+                setJobOfferChecked(false);
+                setFastResponseChecked(false);
+                setEarlyApplicantChecked(false);
+                setWomenChecked(false);
+                setKeyword('');
+              }}
+              className="text-sm font-medium text-[#008bdc] hover:underline"
+            >
+              Clear all
+            </button>
+          </div>
+
+          <div className="border-t border-gray-200 my-2"></div>
+
+          {/* Section h: Keyword Search */}
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">Keyword Search</label>
+            <div className="flex">
+              <input 
+                type="text" 
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="e.g. Design, Mumbai, Infosys" 
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-[#008bdc] placeholder-gray-400 text-gray-900 border-r-0" 
+              />
+              <button 
+                className="bg-[#008bdc] text-white px-3 py-2 rounded-r-md hover:bg-blue-700 flex items-center justify-center"
+                onClick={() => setFilter('searchQuery', keyword)}
+              >
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </>
